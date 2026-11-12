@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 /// Controla el movimiento del repartidor en tercera persona:
 /// caminar, correr, girar hacia la dirección de movimiento, saltar y gravedad.
 /// Envía al Animator los parámetros "Velocidad" (float), "EnSuelo" (bool),
-/// "Saltar" (trigger) y "Esperar" (trigger, tras un rato sin moverse).
+/// "Saltar" (trigger), "Esperar" (trigger, tras un rato sin moverse)
+/// y "Cayendo" (bool, solo en caídas más largas que un salto normal).
 /// </summary>
 [RequireComponent(typeof(CharacterController))]
 public class ControladorRepartidor : MonoBehaviour
@@ -19,6 +20,10 @@ public class ControladorRepartidor : MonoBehaviour
     [Header("Salto y gravedad")]
     [SerializeField] private float alturaSalto = 1.2f;
     [SerializeField] private float gravedad = -9.81f;
+    [Tooltip("Segundos en el aire (sin haber saltado) antes de considerar que el personaje está cayendo.")]
+    [SerializeField] private float tiempoMinimoCaida = 0.3f;
+    [Tooltip("Margen extra sobre la duración de un salto normal antes de pasar a la animación de caída.")]
+    [SerializeField] private float margenCaidaTrasSalto = 0.15f;
 
     [Header("Espera")]
     [Tooltip("Segundos sin moverse antes de reproducir la animación de espera.")]
@@ -38,11 +43,14 @@ public class ControladorRepartidor : MonoBehaviour
     private float velocidadActual;
     private float velocidadVertical;
     private float tiempoQuieto;
+    private float tiempoEnAire;
+    private bool saltoIniciado;
 
     private static readonly int ParamVelocidad = Animator.StringToHash("Velocidad");
     private static readonly int ParamEnSuelo = Animator.StringToHash("EnSuelo");
     private static readonly int ParamSaltar = Animator.StringToHash("Saltar");
     private static readonly int ParamEsperar = Animator.StringToHash("Esperar");
+    private static readonly int ParamCayendo = Animator.StringToHash("Cayendo");
 
     private void Awake()
     {
@@ -94,6 +102,7 @@ public class ControladorRepartidor : MonoBehaviour
         if (enSuelo && accionSaltar != null && accionSaltar.WasPressedThisFrame())
         {
             velocidadVertical = Mathf.Sqrt(alturaSalto * -2f * gravedad);
+            saltoIniciado = true;
             if (animator != null) animator.SetTrigger(ParamSaltar);
         }
 
@@ -102,6 +111,22 @@ public class ControladorRepartidor : MonoBehaviour
         // Mover.
         Vector3 movimiento = direccion.normalized * velocidadActual + Vector3.up * velocidadVertical;
         controller.Move(movimiento * Time.deltaTime);
+
+        // Caída: solo cuenta como "cayendo" si lleva en el aire más de lo que dura
+        // un salto normal (o más de tiempoMinimoCaida si se cayó de un borde sin saltar).
+        bool cayendo = false;
+        if (controller.isGrounded)
+        {
+            tiempoEnAire = 0f;
+            saltoIniciado = false;
+        }
+        else
+        {
+            tiempoEnAire += Time.deltaTime;
+            float duracionSalto = 2f * Mathf.Sqrt(alturaSalto * -2f / gravedad);
+            float limite = saltoIniciado ? duracionSalto + margenCaidaTrasSalto : tiempoMinimoCaida;
+            cayendo = tiempoEnAire > limite;
+        }
 
         // Animator: Velocidad normalizada (0 = quieto, 0.5 = caminar, 1 = correr).
         if (animator != null)
@@ -112,6 +137,7 @@ public class ControladorRepartidor : MonoBehaviour
 
             animator.SetFloat(ParamVelocidad, velocidadNormalizada, 0.1f, Time.deltaTime);
             animator.SetBool(ParamEnSuelo, controller.isGrounded);
+            animator.SetBool(ParamCayendo, cayendo);
         }
 
         // Animación de espera: si el jugador no hace nada durante un rato.
