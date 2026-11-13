@@ -50,16 +50,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6260dea94dd3c354c92d6f732aeba691, type: 3}
       propertyPath: m_Name
-      value: repartidor_modelo
+      value: repartidor
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 6260dea94dd3c354c92d6f732aeba691, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 789466a18470a094ea8691c1fc60f9e1, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 6260dea94dd3c354c92d6f732aeba691, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6260dea94dd3c354c92d6f732aeba691, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 324957168060411400}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6260dea94dd3c354c92d6f732aeba691, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 796189494331468436}
     - targetCorrespondingSourceObject: {fileID: -4381428863130296519, guid: 6260dea94dd3c354c92d6f732aeba691, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4997298942314274521}
@@ -91,3 +101,52 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &8098932191930086509 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6260dea94dd3c354c92d6f732aeba691, type: 3}
+  m_PrefabInstance: {fileID: 8981380775093651772}
+  m_PrefabAsset: {fileID: 0}
+--- !u!143 &324957168060411400
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8098932191930086509}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.8
+  m_Radius: 0.3
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.03
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &796189494331468436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8098932191930086509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a04670dc9b8c71f45a930cc1931bea74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ControladorRepartidor
+  velocidadCaminar: 1.8
+  velocidadCorrer: 5
+  velocidadGiro: 720
+  aceleracion: 10
+  alturaSalto: 1
+  gravedad: -9.81
+  camara: {fileID: 0}
