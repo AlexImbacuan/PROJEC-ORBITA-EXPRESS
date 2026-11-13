@@ -25,6 +25,12 @@ public class ControladorRepartidor : MonoBehaviour
     [Tooltip("Margen extra sobre la duración de un salto normal antes de pasar a la animación de caída.")]
     [SerializeField] private float margenCaidaTrasSalto = 0.15f;
 
+    [Header("Giro 180")]
+    [Tooltip("Ángulo mínimo entre hacia dónde mira y hacia dónde se quiere mover para hacer el giro de 180°.")]
+    [SerializeField] private float anguloParaGiro = 135f;
+    [Tooltip("Velocidad mínima a la que debe ir para hacer el giro (quieto solo gira normal).")]
+    [SerializeField] private float velocidadMinimaGiro = 1f;
+
     [Header("Espera")]
     [Tooltip("Segundos sin moverse antes de reproducir la animación de espera.")]
     [SerializeField] private float tiempoParaEspera = 8f;
@@ -45,17 +51,22 @@ public class ControladorRepartidor : MonoBehaviour
     private float tiempoQuieto;
     private float tiempoEnAire;
     private bool saltoIniciado;
+    private bool girando;
 
     private static readonly int ParamVelocidad = Animator.StringToHash("Velocidad");
     private static readonly int ParamEnSuelo = Animator.StringToHash("EnSuelo");
     private static readonly int ParamSaltar = Animator.StringToHash("Saltar");
     private static readonly int ParamEsperar = Animator.StringToHash("Esperar");
     private static readonly int ParamCayendo = Animator.StringToHash("Cayendo");
+    private static readonly int ParamGirar = Animator.StringToHash("Girar");
+    private const string EtiquetaGiro = "Giro";
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        animator = GetComponentInChildren<Animator>();
+        // El Animator debe estar en este mismo objeto para que OnAnimatorMove funcione (giro 180).
+        animator = GetComponent<Animator>();
+        if (animator == null) animator = GetComponentInChildren<Animator>();
 
         if (camara == null && Camera.main != null)
             camara = Camera.main.transform;
@@ -87,8 +98,26 @@ public class ControladorRepartidor : MonoBehaviour
             : 0f;
         velocidadActual = Mathf.MoveTowards(velocidadActual, velocidadObjetivo, aceleracion * Time.deltaTime);
 
-        // Girar hacia la dirección de movimiento.
-        if (direccion.sqrMagnitude > 0.01f)
+        // ¿Está reproduciendo el giro de 180? (estados del Animator con la etiqueta "Giro")
+        girando = EstaEnGiro();
+
+        // Iniciar giro de 180: va a buena velocidad y pide moverse casi en sentido contrario.
+        bool inicioGiro = false;
+        if (!girando && animator != null && controller.isGrounded
+            && velocidadActual >= velocidadMinimaGiro && direccion.sqrMagnitude > 0.25f
+            && Vector3.Angle(transform.forward, direccion) >= anguloParaGiro)
+        {
+            animator.SetTrigger(ParamGirar);
+            inicioGiro = true;
+        }
+        else if (animator != null)
+        {
+            // Evita que un trigger sin usar dispare el giro más tarde (por ejemplo al aterrizar).
+            animator.ResetTrigger(ParamGirar);
+        }
+
+        // Girar hacia la dirección de movimiento (durante el giro 180 lo hace la animación).
+        if (!girando && !inicioGiro && direccion.sqrMagnitude > 0.01f)
         {
             Quaternion rotacionObjetivo = Quaternion.LookRotation(direccion);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotacionObjetivo, velocidadGiro * Time.deltaTime);
@@ -99,7 +128,7 @@ public class ControladorRepartidor : MonoBehaviour
         if (enSuelo && velocidadVertical < 0f)
             velocidadVertical = -2f; // mantiene al personaje pegado al suelo
 
-        if (enSuelo && accionSaltar != null && accionSaltar.WasPressedThisFrame())
+        if (enSuelo && !girando && accionSaltar != null && accionSaltar.WasPressedThisFrame())
         {
             velocidadVertical = Mathf.Sqrt(alturaSalto * -2f * gravedad);
             saltoIniciado = true;
@@ -109,7 +138,9 @@ public class ControladorRepartidor : MonoBehaviour
         velocidadVertical += gravedad * Time.deltaTime;
 
         // Mover.
-        Vector3 movimiento = direccion.normalized * velocidadActual + Vector3.up * velocidadVertical;
+        // Durante el giro 180 el desplazamiento horizontal lo aporta la animación (OnAnimatorMove).
+        Vector3 horizontal = girando || inicioGiro ? Vector3.zero : direccion.normalized * velocidadActual;
+        Vector3 movimiento = horizontal + Vector3.up * velocidadVertical;
         controller.Move(movimiento * Time.deltaTime);
 
         // Caída: solo cuenta como "cayendo" si lleva en el aire más de lo que dura
@@ -148,5 +179,37 @@ public class ControladorRepartidor : MonoBehaviour
             tiempoQuieto = 0f;
             if (animator != null) animator.SetTrigger(ParamEsperar);
         }
+    }
+
+    /// <summary>
+    /// True mientras el Animator reproduce (o entra a) un estado con la etiqueta "Giro".
+    /// Cuando ya está saliendo del giro, el jugador recupera el control.
+    /// </summary>
+    private bool EstaEnGiro()
+    {
+        if (animator == null) return false;
+
+        if (animator.IsInTransition(0))
+            return animator.GetNextAnimatorStateInfo(0).IsTag(EtiquetaGiro);
+
+        return animator.GetCurrentAnimatorStateInfo(0).IsTag(EtiquetaGiro);
+    }
+
+    /// <summary>
+    /// Unity lo llama después de evaluar las animaciones. Solo durante el giro 180
+    /// aplicamos la rotación y el avance que trae la animación; el resto del tiempo
+    /// el movimiento lo controla el script.
+    /// </summary>
+    private void OnAnimatorMove()
+    {
+        if (!girando || animator == null) return;
+
+        // Solo rotación en el eje vertical.
+        float giroY = animator.deltaRotation.eulerAngles.y;
+        transform.Rotate(0f, giroY, 0f);
+
+        Vector3 avance = animator.deltaPosition;
+        avance.y = 0f;
+        controller.Move(avance);
     }
 }
