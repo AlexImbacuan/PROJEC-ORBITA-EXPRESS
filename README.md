@@ -1,6 +1,6 @@
 # Project Órbita Express
 
-Proyecto de Unity desarrollado para el **Taller 2**.
+Proyecto de Unity desarrollado para el curso desarrollo de videojuegos.
 
 ## Descripción
 
