@@ -9,6 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3607840913425965428}
+  - component: {fileID: 7640740955003014935}
+  - component: {fileID: 2270847034156810856}
+  - component: {fileID: 4208752709949377895}
   m_Layer: 0
   m_Name: Moto
   m_TagString: Untagged
@@ -32,6 +35,81 @@ Transform:
   - {fileID: 8999220732852422113}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &7640740955003014935
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981092524958134605}
+  serializedVersion: 5
+  m_Mass: 200
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &2270847034156810856
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981092524958134605}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.4076017, y: 1.5754496, z: 1.9594777}
+  m_Center: {x: 0.00024402142, y: 0.7877248, z: 0.000805974}
+--- !u!114 &4208752709949377895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981092524958134605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 156cbc08facd87a41b6122016100bbfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ControladorMoto
+  alturaFlote: 0.4
+  fuerzaResorte: 35
+  amortiguacion: 6
+  capasSuelo:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  aceleracion: 15
+  velocidadMaxima: 14
+  velocidadMaximaReversa: 5
+  multiplicadorTurbo: 1.6
+  fuerzaGiro: 4
+  agarreLateral: 4
+  frenadoSuave: 1.5
+  fuerzaEnderezar: 8
+  controlActivo: 1
 --- !u!1001 &8892672950566822410
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -87,8 +165,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d693427eb517ad14eb068ee8beed9a93, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2159630551456774752}
   m_SourcePrefab: {fileID: 100100000, guid: d693427eb517ad14eb068ee8beed9a93, type: 3}
+--- !u!1 &8622272599173341019 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d693427eb517ad14eb068ee8beed9a93, type: 3}
+  m_PrefabInstance: {fileID: 8892672950566822410}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2159630551456774752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8622272599173341019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1317cd2c92afa2d44856d317896b9e18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BalanceoFlotante
+  amplitud: 0.05
+  frecuencia: 1.2
+  balanceoLateral: 1.5
 --- !u!4 &8999220732852422113 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d693427eb517ad14eb068ee8beed9a93, type: 3}
