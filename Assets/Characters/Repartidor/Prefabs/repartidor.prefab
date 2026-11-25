@@ -70,6 +70,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6260dea94dd3c354c92d6f732aeba691, type: 3}
       insertIndex: -1
       addedObject: {fileID: 796189494331468436}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 6260dea94dd3c354c92d6f732aeba691, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -6538147940276278016}
     - targetCorrespondingSourceObject: {fileID: -4381428863130296519, guid: 6260dea94dd3c354c92d6f732aeba691, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4997298942314274521}
@@ -149,4 +152,29 @@ MonoBehaviour:
   aceleracion: 10
   alturaSalto: 1
   gravedad: -9.81
+  tiempoMinimoCaida: 0.3
+  margenCaidaTrasSalto: 0.15
+  anguloParaGiro: 135
+  velocidadMinimaGiro: 1
+  tiempoParaEspera: 8
   camara: {fileID: 0}
+--- !u!114 &-6538147940276278016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8098932191930086509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4951851cdcc8f47802dffc614740a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConductorMoto
+  radioDeteccion: 2.5
+  velocidadMaximaParaBajar: 3
+  pesoPosicionIK: 0
+  pesoRotacionIK: 1
+  inclinacionTorso: 0
+  bajadaPuntoTorso: -3.74
+  avancePuntoTorso: -4.25
+  pesoCabeza: 1
