@@ -50,10 +50,36 @@ public class ControladorMoto : MonoBehaviour
     [SerializeField] private float alturaCentroMasa = 0.3f;
 
     [Header("Control")]
-    [Tooltip("Si está desactivado la moto flota pero no responde al teclado (por ejemplo, sin conductor).")]
-    [SerializeField] private bool controlActivo = true;
+    [Tooltip("Si está desactivado la moto flota pero no responde al teclado. Lo activa el conductor al subirse.")]
+    [SerializeField] private bool controlActivo = false;
+
+    [Header("Conductor")]
+    [Tooltip("Punto donde se coloca el conductor (hijo de Modelo para que se incline con la moto). Su flecha azul debe mirar al frente.")]
+    [SerializeField] private Transform asiento;
+    [Tooltip("Punto donde aparece el conductor al bajarse (a un costado de la moto).")]
+    [SerializeField] private Transform puntoBajada;
+
+    [Header("Puntos de apoyo del conductor (IK, opcionales)")]
+    [Tooltip("Dónde apoya el pie izquierdo. Hijo de Modelo. Flecha azul = hacia donde apunta la punta del pie.")]
+    [SerializeField] private Transform pieIzquierdo;
+    [SerializeField] private Transform pieDerecho;
+    [Tooltip("Dónde agarra el manubrio la mano izquierda. Hijo de Modelo.")]
+    [SerializeField] private Transform manoIzquierda;
+    [SerializeField] private Transform manoDerecha;
+
+    public Transform Asiento => asiento;
+    public Transform PuntoBajada => puntoBajada;
+    public Transform PieIzquierdo => pieIzquierdo;
+    public Transform PieDerecho => pieDerecho;
+    public Transform ManoIzquierda => manoIzquierda;
+    public Transform ManoDerecha => manoDerecha;
+
+    [Header("Depuración")]
+    [Tooltip("Muestra en pantalla el estado de la moto (entrada, suelo, velocidad). Solo para pruebas.")]
+    [SerializeField] private bool mostrarDepuracion = false;
 
     private const float MargenRayo = 0.05f;
+    private int apoyosUltimoPaso;
 
     private Rigidbody rb;
     private BoxCollider caja;
@@ -158,6 +184,7 @@ public class ControladorMoto : MonoBehaviour
             sumaNormales += hit.normal;
         }
 
+        apoyosUltimoPaso = apoyos;
         EnSuelo = apoyos > 0;
         return EnSuelo ? sumaNormales.normalized : Vector3.up;
     }
@@ -266,6 +293,24 @@ public class ControladorMoto : MonoBehaviour
         Vector3 tamano = transform.InverseTransformVector(limites.size);
         colisionador.center = transform.InverseTransformPoint(limites.center);
         colisionador.size = new Vector3(Mathf.Abs(tamano.x), Mathf.Abs(tamano.y), Mathf.Abs(tamano.z));
+    }
+
+    private void OnGUI()
+    {
+        if (!mostrarDepuracion || rb == null) return;
+
+        string texto =
+            $"MOTO: {name}\n" +
+            $"Control activo: {controlActivo}\n" +
+            $"Acción Move encontrada: {accionMover != null}  (habilitada: {accionMover?.enabled})\n" +
+            $"Entrada: {entrada}   Turbo: {turbo}\n" +
+            $"En suelo: {EnSuelo}   Resortes tocando: {apoyosUltimoPaso}/4\n" +
+            $"Velocidad adelante: {VelocidadAdelante:0.00} m/s\n" +
+            $"Rigidbody dormido: {rb.IsSleeping()}   Kinematic: {rb.isKinematic}\n" +
+            $"Posición: {transform.position}";
+
+        GUI.Box(new Rect(10, 10, 460, 140), GUIContent.none);
+        GUI.Label(new Rect(20, 15, 450, 135), texto);
     }
 
     // Dibuja los rayos de flotación en la Scene al seleccionar la moto.
