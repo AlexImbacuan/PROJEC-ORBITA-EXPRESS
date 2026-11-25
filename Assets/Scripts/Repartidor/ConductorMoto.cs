@@ -45,6 +45,11 @@ public class ConductorMoto : MonoBehaviour
     /// <summary>True mientras va montado en una moto.</summary>
     public bool Montado => motoActual != null;
 
+    /// <summary>
+    /// Si es true, la tecla E no hace nada (por ejemplo durante una cinemática).
+    /// </summary>
+    public bool EntradaBloqueada { get; set; }
+
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -57,6 +62,7 @@ public class ConductorMoto : MonoBehaviour
 
     private void Update()
     {
+        if (EntradaBloqueada) return;
         if (accionInteractuar == null || !accionInteractuar.WasPressedThisFrame()) return;
 
         if (Montado)
@@ -68,12 +74,21 @@ public class ConductorMoto : MonoBehaviour
     private void IntentarSubir()
     {
         ControladorMoto moto = BuscarMotoCercana();
-        if (moto == null) return;
+        if (moto != null) SubirA(moto);
+    }
+
+    /// <summary>
+    /// Sube al conductor a la moto indicada sin buscarla ni pulsar E
+    /// (lo usan las cinemáticas). Devuelve false si no se pudo.
+    /// </summary>
+    public bool SubirA(ControladorMoto moto)
+    {
+        if (moto == null || Montado) return false;
 
         if (moto.Asiento == null)
         {
             Debug.LogWarning($"La moto '{moto.name}' no tiene asignado el campo Asiento en Controlador Moto.", moto);
-            return;
+            return false;
         }
 
         motoActual = moto;
@@ -92,6 +107,8 @@ public class ConductorMoto : MonoBehaviour
             animator.SetFloat(ParamVelocidad, 0f);
             animator.SetBool(ParamManejando, true);
         }
+
+        return true;
     }
 
     private void IntentarBajar()

@@ -39,13 +39,20 @@ Abre el proyecto en Unity y **espera a que termine de importar y compilar sin ca
 
 ## 3. Abrir MCP for Unity
 
-1. En Unity: **Window → MCP for Unity**.
-2. La primera vez aparece un asistente de configuración que revisa Python y uv. Si algo sale en rojo, instálalo (paso 1) y vuelve a revisar. Cuando todo esté en verde, presiona **Done**.
-3. Aparece la lista de apps de IA detectadas en tu computador.
+En Unity, menú **Window → MCP for Unity**, hay estas opciones:
+
+| Opción | Para qué |
+|---|---|
+| **Local Setup Window** | Revisa que Python y uv estén instalados |
+| **Toggle MCP Window** (`Ctrl+Shift+M`) | Ventana principal: estado de la conexión y configuración de tu app de IA |
+| Edit EditorPrefs / Blender Bridge | Opciones avanzadas, no se necesitan |
+
+1. Abre **Local Setup Window** y revisa que Python y uv estén en verde. Si algo sale en rojo, instálalo (paso 1) y vuelve a revisar.
+2. Abre **Toggle MCP Window**. Ahí aparece la lista de apps de IA detectadas en tu computador.
 
 ## 4. Conectar tu app de IA
 
-En la ventana **MCP for Unity**, selecciona tu app y presiona **Configure** (o **Configure All Detected Clients** / **Configure Selected**).
+En la ventana principal (**Toggle MCP Window**), selecciona tu app y presiona **Configure** (o **Configure All Detected Clients** / **Configure Selected**).
 
 - **Claude Code:** usa el botón **Register**. Si dice *"Claude Not Found"*, instala Claude Code o indica dónde está con **Choose Claude Location**. Después de cambiar la configuración, reinicia Claude Code.
 - **Claude Desktop:** se configura automáticamente desde la ventana. Reinicia Claude Desktop después.
@@ -56,7 +63,7 @@ El servidor usa por defecto `http://localhost:8080/mcp`.
 
 ## 5. Verificar que funciona
 
-1. En la ventana **MCP for Unity** el estado debe decir **Connected**.
+1. En la ventana principal (**Toggle MCP Window**) el estado debe decir **Connected**.
 2. Abre una escena de pruebas y pídele a tu IA:
    > *Crea un cubo rojo, uno azul y uno amarillo en la escena actual.*
 3. Si aparecen los cubos, ya está. Bórralos (o no guardes la escena).
@@ -73,10 +80,10 @@ El servidor usa por defecto `http://localhost:8080/mcp`.
 | Problema | Qué hacer |
 |---|---|
 | **"uv Not Found"** en rojo | Instala uv (paso 1). Si ya está, usa **Choose UV Install Location** y elige `%LOCALAPPDATA%\Microsoft\WinGet\Links\uv.exe` |
-| **"No Unity Instances Found"** | Reinicia tu app de IA. Si sigue: **Window → MCP for Unity → Restart Server** |
+| **"No Unity Instances Found"** | Reinicia tu app de IA. Si sigue, abre **Toggle MCP Window** y reinicia el servidor desde ahí |
 | Package Manager: **"Error when executing git command"** | Instala Git y reinicia Unity |
 | **"fatal: not in a git directory"** | En una terminal: `git config --global --add safe.directory "RUTA/DEL/PROYECTO"` y reinicia Unity |
-| El puerto 8080 está ocupado | Cámbialo en la ventana **MCP for Unity** (por ejemplo a 8090) y vuelve a configurar tu app |
+| El puerto 8080 está ocupado | Cámbialo en **Toggle MCP Window** (por ejemplo a 8090) y vuelve a configurar tu app |
 | El editor se congela al abrir el proyecto | Revisa que `Packages/manifest.json` **no** tenga `com.unity.ai.assistant` ni `com.unity.ai.inference` |
 
 Documentación oficial: [coplaydev.github.io/unity-mcp](https://coplaydev.github.io/unity-mcp/)
