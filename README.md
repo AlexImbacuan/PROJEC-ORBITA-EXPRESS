@@ -65,6 +65,7 @@ Las carpetas `Library/`, `Temp/`, `Logs/` y `UserSettings/` son generadas localm
 - **uGUI** (`com.unity.ugui`)
 - **Visual Scripting** (`com.unity.visualscripting`)
 - **Test Framework** (`com.unity.test-framework`)
+- **MCP for Unity** (`com.coplaydev.unity-mcp`, versión fija `v10.3.0`): permite conectar una IA al editor. Es opcional usarlo; para configurarlo ver [docs/configurar-mcp.md](docs/configurar-mcp.md).
 
 ## Convenciones de trabajo
 
