@@ -6,8 +6,13 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/CimaMontana.unity
+    guid: 00c655fe5b71313489840c843746cf8e
+  - enabled: 1
+    path: Assets/Scenes/MenuPrincipal.unity
+    guid: acb098ff140bcab4cbb51b3236c0a6ac
+  - enabled: 1
+    path: Assets/Scenes/PruebaEntregas.unity
+    guid: 8495ba955d71a9541bb7dde0dada6414
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  m_UseUCBPForAssetBundles: 0
