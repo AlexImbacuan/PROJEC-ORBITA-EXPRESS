@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 7640740955003014935}
   - component: {fileID: 2270847034156810856}
   - component: {fileID: 4208752709949377895}
+  - component: {fileID: 5699110892993494471}
   m_Layer: 0
   m_Name: Moto
   m_TagString: Untagged
@@ -308,6 +309,22 @@ MonoBehaviour:
   pieDerecho: {fileID: 3256832540470282979}
   manoIzquierda: {fileID: 1861718782302542741}
   manoDerecha: {fileID: 377333919639724146}
+  mostrarDepuracion: 0
+--- !u!114 &5699110892993494471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7981092524958134605}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e536d51a1d0fede40b75d8452d7bd819, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DetectorGolpes
+  impactoMinimo: 4
+  danioPorImpacto: 5
+  tiempoEntreGolpes: 0.5
 --- !u!1001 &8892672950566822410
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -15,6 +15,9 @@ cambian la forma de manejar. El jugador debe entregar cada pedido a tiempo y en
 buen estado antes de que se enfríe o se dañe. El nivel termina cuando se
 completa la última entrega de la ruta.
 
+La historia completa del juego (personajes, mundos y cómo se cuenta en cada
+escena) está en [docs/historia.md](docs/historia.md).
+
 **Temas aplicados:** físicas (Rigidbody, colliders, Physic Materials, gravedad
 variable), personaje animado con Animator, prefabs, sistemas de partículas,
 iluminación, audio dinámico y control de versiones con Git.
